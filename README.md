@@ -8,6 +8,4 @@
 
 **Difficulty:** Hard
 
-**Short Approach Summary**
-
-Setiap hari, tanaman yang memiliki lebih banyak pestisida dibanding tanaman di sebelah kirinya akan mati. Program ini membantu menghitung jumlah hari yang dibutuhkan sampai tidak ada tanaman yang mati lagi. 
+**Short Approach Summary:** Setiap hari, tanaman yang memiliki lebih banyak pestisida dibanding tanaman di sebelah kirinya akan mati. Program ini membantu menghitung jumlah hari yang dibutuhkan sampai tidak ada tanaman yang mati lagi. 
