@@ -1,12 +1,12 @@
 # Stacks-DSA-Group-5
 
-Nama: Andi Nurul Aliyah Haris
+**Nama:** Andi Nurul Aliyah Haris
 
-NIM: D121241080
+**NIM:** D121241080
 
-Problem Link: [Poisonous Plants - HackerRank](https://www.hackerrank.com/challenges/poisonous-plants/problem?isFullScreen=true)
+**Problem Link:** [Poisonous Plants - HackerRank](https://www.hackerrank.com/challenges/poisonous-plants/problem?isFullScreen=true)
 
-Difficulty: Hard
+**Difficulty:** Hard
 
 **Short Approach Summary**
 
