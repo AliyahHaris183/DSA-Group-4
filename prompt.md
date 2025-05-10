@@ -1,6 +1,6 @@
-**Saya memberikan kode yang baru setengah kepada AI dan meminta perbedaan calloc dan malloc.**
+**Saya memberikan link soal dan kode yang baru setengah jadi kepada AI, serta meminta perbedaan calloc dan malloc.**
 
-"https://www.hackerrank.com/challenges/poisonous-plants/problem?isFullScreen=true
+https://www.hackerrank.com/challenges/poisonous-plants/problem?isFullScreen=true
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,10 +16,10 @@ int poisonousPlants(int jumlah_p, int* p) {
         }
 }
 
-saya baru di sini. beda calloc dan malloc itu, calloc men-set agar semua isi array bernilai 0 dan bukan nilai acak kan?"
+saya baru di sini. beda calloc dan malloc itu, calloc men-set agar semua isi array bernilai 0 dan bukan nilai acak kan?
 
 
-**AI menjawab, bahwa saya betul. calloc digunakan saat saya ingin memastikan semua elemen array terinisialisasi ke 0. Maka saya lanjut meminta bantuan untuk meneruskan program.**
+**AI menjawab, bahwa saya betul. Calloc digunakan saat saya ingin memastikan semua elemen array terinisialisasi ke 0. Maka saya lanjut meminta bantuan untuk meneruskan program.**
 
 
 **Kode solusi dari AI:**
@@ -98,5 +98,5 @@ int main() {
 **Perbaikan dari AI:**
 
     int poisonousPlants(p_count, p);
-    Harusnya ->
+    Harusnya:
     int result = poisonousPlants(p_count, p);
