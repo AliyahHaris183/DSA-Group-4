@@ -1,55 +1,73 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Fungsi untuk menghitung jumlah hari sampai semua tanaman menjadi stabil
+// Struktur untuk menyimpan info tiap tanaman:
+// - pesticide: kadar racun tanaman
+// - daysAlive: berapa hari dibutuhkan sampai tanaman ini tidak membunuh tanaman setelahnya
+typedef struct {
+    int pesticide;
+    int daysAlive;
+} PlantInfo;
+
+// Fungsi utama untuk menentukan berapa hari sampai semua tanaman stabil
 int poisonousPlants(int p_count, int* p) {
-    // Array 'days' menyimpan jumlah hari tanaman ke-i mati
-    int* days = calloc(p_count, sizeof(int));
-    int max_days = 0; // Menyimpan hari maksimum yang diperlukan
+    // Alokasi memori untuk stack (pakai array biasa)
+    PlantInfo* stack = malloc(sizeof(PlantInfo) * p_count);
+    int top = -1; // indeks teratas dari stack
 
-    // Iterasi dimulai dari indeks 1 karena tanaman pertama tidak bisa mati
-    for (int i = 1; i < p_count; i++) {
-        // Jika tanaman saat ini lebih besar dari tanaman sebelumnya, maka dia akan mati keesokan harinya
-        if (p[i] > p[i - 1]) {
-            days[i] = 1;
-        }
-        // Jika tanaman saat ini tidak lebih besar dari sebelumnya
-        else {
-            int max_day = 0;
+    int max_days = 0; // nilai maksimum hari yang dibutuhkan hingga stabil
 
-            // Cek ke belakang untuk melihat berapa hari maksimal tanaman sebelumnya mati
-            for (int j = i - 1; j >= 0 && p[j] >= p[i]; j--) {
-                if (days[j] > max_day) {
-                    max_day = days[j];
-                }
+    // Iterasi setiap tanaman
+    for (int i = 0; i < p_count; i++) {
+        int days = 0; // hari yang dibutuhkan sampai tanaman ini tidak lagi membunuh
+
+        // Cek semua tanaman sebelumnya di stack
+        // Pop semua tanaman yang racunnya >= tanaman sekarang
+        // karena mereka tidak akan membunuh tanaman ini
+        while (top >= 0 && p[i] <= stack[top].pesticide) {
+            // Ambil jumlah hari maksimum dari tanaman yang di-pop
+            if (stack[top].daysAlive > days) {
+                days = stack[top].daysAlive;
             }
-
-            // Tanaman ini mati satu hari setelah tanaman sebelumnya yang paling lambat mati
-            days[i] = max_day + 1;
+            top--; // keluarkan dari stack
         }
 
-        // Update jumlah hari maksimum jika perlu
-        if (days[i] > max_days) {
-            max_days = days[i];
+        // Kalau tidak ada tanaman sebelumnya yang lebih kecil (stack kosong)
+        // berarti tanaman ini aman sejak awal
+        if (top == -1) {
+            days = 0;
+        } else {
+            // Kalau ada tanaman sebelumnya yang lebih kecil,
+            // maka butuh 1 hari ekstra untuk bisa selamat
+            days += 1;
+        }
+
+        // Masukkan tanaman ini ke stack
+        stack[++top] = (PlantInfo){p[i], days};
+
+        // Update hari maksimum jika perlu
+        if (days > max_days) {
+            max_days = days;
         }
     }
 
-    // Bebaskan memori yang sudah dialokasikan
-    free(days);
+    // Bebaskan memori setelah selesai
+    free(stack);
 
-    // Kembalikan jumlah hari maksimal
+    // Kembalikan jumlah hari maksimum sebagai hasil akhir
     return max_days;
 }
 
+// Fungsi utama (entry point)
 int main() {
-    // Contoh input: array berisi tingkat racun tanaman
+    // Contoh array tanaman dan kadar racunnya
     int p[] = {6, 5, 8, 4, 7, 10, 9};
-    int p_count = sizeof(p) / sizeof(p[0]); // Hitung jumlah elemen dalam array
+    int p_count = sizeof(p) / sizeof(p[0]);
 
-    // Panggil fungsi dan simpan hasilnya
+    // Panggil fungsi utama
     int result = poisonousPlants(p_count, p);
 
-    // Cetak hasilnya
+    // Tampilkan hasil
     printf("Jumlah hari sampai semua tanaman stabil: %d\n", result);
 
     return 0;
