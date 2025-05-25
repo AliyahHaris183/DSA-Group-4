@@ -1,74 +1,82 @@
 #include <stdio.h>
+// Pustaka input/output.
 #include <stdlib.h>
+// Pustaka untuk fungsi malloc dan free.
 
-// Struktur untuk menyimpan info tiap tanaman:
-// - pesticide: kadar racun tanaman
-// - daysAlive: berapa hari dibutuhkan sampai tanaman ini tidak membunuh tanaman setelahnya
-typedef struct {
-    int pesticide;
-    int daysAlive;
+typedef struct { // Definisi sturktur.
+    int pesticide; // Menyimpan kadar racun tanaman.
+    int daysAlive; // Menyimpan jumlah hari hidup tanaman.
 } PlantInfo;
 
-// Fungsi utama untuk menentukan berapa hari sampai semua tanaman stabil
 int poisonousPlants(int p_count, int* p) {
-    // Alokasi memori untuk stack (pakai array biasa)
+// Fungsi yang menerima masukan p_count (panjang array) dan p (isi array).
+// Misal p = {6, 5, 8, 4, 7, 10, 9}, p_count = 7.
     PlantInfo* stack = malloc(sizeof(PlantInfo) * p_count);
-    int top = -1; // indeks teratas dari stack
+    // Perintah alokasi memori array stack.
+    // Malloc adalah memory location dinamis untuk membuat array stack berukuran fleksibel.
+    // sizeof(PlantInfo) * p_count = (4 byte (pesticide) x 4 byte (days Alive)) * 8 = 56 byte.
+    int top = -1;
+    // Stack kosong.
+    int max_days = 0;
+    // Untuk menyimpan hasi akhir, yakni maksimal hari hingga semua tanaman stabil.
 
-    int max_days = 0; // nilai maksimum hari yang dibutuhkan hingga stabil
-
-    // Iterasi setiap tanaman
     for (int i = 0; i < p_count; i++) {
-        int days = 0; // hari yang dibutuhkan sampai tanaman ini tidak lagi membunuh
+    // Iterasi array dari kiri ke kanan.
+        int days = 0; // Hari hidup untuk tanaman, saat ini 0 karena diasumsikan aman.
+        int max_popped_days = 0; // Hari hidup maksimum dari tanaman-tanaman yang dikeluarkan (di-pop).
 
-        // Cek semua tanaman sebelumnya di stack
-        // Pop semua tanaman yang racunnya >= tanaman sekarang
-        // karena mereka tidak akan membunuh tanaman ini
         while (top >= 0 && p[i] <= stack[top].pesticide) {
-            // Ambil jumlah hari maksimum dari tanaman yang di-pop
-            if (stack[top].daysAlive > days) {
-                days = stack[top].daysAlive;
+            // Selama stack tidak kosong,
+            // Dan kadar racun i kurang dari atau sama dengan kadar racun top,
+                if (stack[top].daysAlive > max_popped_days) {
+                // Kalau hari hidup tanaman top lebih dari hari maksimal tanaman yang telah di-pop,
+                    max_popped_days = stack[top].daysAlive;
+                    // Maka hari maksimal tanaman yang telah di-pop adalah hari hidup tanaman top yang baru.
+                }
+                top--;
+                // Top di-pop keluar dari stack.
             }
-            top--; // keluarkan dari stack
+    
+            if (top == -1) {
+            // Kalau stack kosong,
+                days = 0;
+            } else {
+            // Kalau tidak kosong,
+                days = max_popped_days + 1;
         }
 
-        // Kalau tidak ada tanaman sebelumnya yang lebih kecil (stack kosong)
-        // berarti tanaman ini aman sejak awal
-        if (top == -1) {
-            days = 0;
-        } else {
-            // Kalau ada tanaman sebelumnya yang lebih kecil,
-            // maka butuh 1 hari ekstra untuk bisa selamat
-            days += 1;
-        }
-
-        // Masukkan tanaman ini ke stack
         stack[++top] = (PlantInfo){p[i], days};
+        // Tambahkan tanaman i ke stack, beserta hari hidupnya.
 
-        // Update hari maksimum jika perlu
         if (days > max_days) {
             max_days = days;
         }
+        // Kalau hari hidup tanaman ini lebih besar dari hari maksimal sebelumnya,
+        // maka perbarui max_days jadi nilai yang baru.
+
     }
 
-    // Bebaskan memori setelah selesai
     free(stack);
+    // Bebaskan memori yang dialokasikan untuk stack setelah selesai.
 
-    // Kembalikan jumlah hari maksimum sebagai hasil akhir
     return max_days;
+    // Kembalikan jumlah hari maksimal sebagai hasil akhir fungsi.
+
 }
 
-// Fungsi utama (entry point)
 int main() {
-    // Contoh array tanaman dan kadar racunnya
     int p[] = {6, 5, 8, 4, 7, 10, 9};
+    // Array input kadar racun tanaman.
+
     int p_count = sizeof(p) / sizeof(p[0]);
+    // Hitung jumlah tanaman dari ukuran array.
 
-    // Panggil fungsi utama
     int result = poisonousPlants(p_count, p);
+    // Panggil fungsi utama dan simpan hasilnya ke variabel result.
 
-    // Tampilkan hasil
     printf("Jumlah hari sampai semua tanaman stabil: %d\n", result);
+    // Cetak hasil ke layar.
 
     return 0;
+    // Program selesai.
 }
